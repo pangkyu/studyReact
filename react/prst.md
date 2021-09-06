@@ -298,3 +298,22 @@ export default MyName;
   ```
 
   [비구조화 할당](https://velog.io/@public_danuel/destructuring-assignment)
+
+- 이벤트 설정
+  - render()에서 이벤트 설정을 한 부분을 확인
+  ```js
+   render(){
+       return(
+           <div>
+               <h1>카운터</h1>
+               <div>값 : {this.state.number}</div>
+               <button onClick = {this.handleIncrease}>+</button>
+               <button onClick = {this.handleDecrease}>-</button>
+           </div>
+       )
+   }
+  ```
+  ※ 리액트에서 이벤트 함수를 설정할때 html과 다음과 같은 사항이 다르다
+  1.  이벤트이름을 설정할 때 camelCase로 설정.
+  2.  이벤트에 전달해주는 값은 함수여야 한다.
+      => 만약 onClick = {this.handleIncrease()} 와 같은 방법을 사용하면 렌더링을 할 때마다 해당 함수가 호출이 된다. (무한반복)

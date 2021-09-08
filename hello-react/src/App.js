@@ -1,11 +1,12 @@
-import logo from './logo.svg';
-import './App.css';
-import MyName from './MyName';
+import React, { Component } from 'react';
+import Counter from './Counter';
 
-function App() {
-  return (
-    <MyName name = "리액트" />
-  );
+class App extends Component {
+  render() {
+    return (
+      <Counter />
+    );
+  }
 }
 
 export default App;

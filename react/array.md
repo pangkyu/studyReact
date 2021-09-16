@@ -293,4 +293,103 @@ export default PhoneInfoList;
 
   ```js
   // src/components/PhoneInfo.js
+
+  import React, { Component } from "react";
+
+  class PhoneInfo extends Component {
+    static defaultProps = {
+      info: {
+        name: "이름",
+        phone: "010-0000-0000",
+        id: 0,
+      },
+    };
+
+    handleRemove = () => {
+      //삭제 버튼이 클릭되면 onRemove에 id 넣어서 호출
+      const { info, onRemove } = this.props;
+      onRemove(info.id);
+    };
+
+    render() {
+      const style = {
+        border: "1px solid black",
+        padding: "8px",
+        margin: "8px",
+      };
+
+      const { name, phone } = this.props.info;
+
+      return (
+        <div style={style}>
+          <div>
+            <b>{name}</b>
+          </div>
+          <div>{phone}</div>
+          <button onClick={this.handleRemove}>삭제</button>
+        </div>
+      );
+    }
+  }
+
+  export default PhoneInfo;
   ```
+
+---
+
+- 데이터 수정
+  - 데이터 수정을 할때도 마찬가지로 불변성을 지켜줘야한다. 기존의 배열과, 그리고 그 내부에있는 객체를 절대로 직접적으로 수정하면 안된다.
+
+ex)
+
+```js
+const array = [
+  { id: 0, text: "hello", tag: "a" },
+  { id: 1, text: "world", tag: "b" },
+  { id: 2, text: "bye", tag: "c" },
+];
+```
+
+    - 여기서 기존의 값을 건드리지 않고 id가 1인 객체의 text 값을 'Korea'라는 값으로 바꾼 새로운 배열을 만들어보기.
+
+```js
+  const modifiedArray = array.map(item => item.id === 1
+    ? ({ ...item,. text : 'Korea' }))
+    : item
+  // id가 일치하면 새 객체를 만들고, 기존의 내용을 집어넣고 원하는 값 덮어쓰고
+  // 바꿀 필요 없는것들은 그냥 기존값을 사용한다.
+```
+
+```js
+//file : src/App.js
+handleUpdate = (id, data) => {
+  const { information } = this.state;
+  this.setState({
+    information: information.map((info) =>
+      id === info.id ? { ...info, ...data } : info
+    ),
+  });
+};
+```
+
+- id와 data 파라미터를 받아와서 필요한 정보를 업데이트 해주는 함수.
+
+```js
+  static defaultProps = {
+    onUpdate : () => console.warn('onUpdate not defined'),
+  }
+  render(){
+    const { onUpdate } = this.props;
+    const list = data.map(
+      info => (
+        <PhoneInfo
+          key = {info.id}
+          info = {info}
+          onRemove = {onRemove}
+          onUpdate = {onUpdate}/>
+      )
+    );
+  }
+```
+
+- 데이터를 컴포넌트로 렌더링하는 과정에서 PhoneInfo에 Update를 그대로 전달한다.

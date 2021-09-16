@@ -215,3 +215,82 @@ export default PhoneInfoList;
 ==> key 값은 언제나 고유해야 한다.
 
 ※ 만약 키 값을 빼먹으면 렌더링이 되긴 하지만 개발자도구 콘솔에서 경고창이 발생한다.
+
+---
+
+- 데이터 제거
+
+  - ex)
+
+  ```js
+  // 배열에서 3을 제거하는 방법
+  const arr = [1, 2, 3, 4, 5];
+
+  // 방법 1) slice과 concat을 활용
+  array.slice(0, 2).concat(array.slice(3, 5)); // [1,2,4,5]
+  // 방법 1-2) 배열 전개 연산자를 사용
+  [...array.slice(0, 2), ...array.slice(3, 5)];
+  // 방법 2) 필터링
+  array.filter((num) => num !== 3); // [1,2,4,5]
+  ```
+
+  - 구현)
+
+  ```js
+    // file : src/App.js
+    handleRemove = (id) =>{
+      const { information } = this.state;
+      this.setState({
+        information : information.filter(info => info.id !== id)
+      })
+    }
+
+    render(){
+      const { information } = this.state;
+      return (
+        <div>
+          <PhoneInfoList
+            onRemove = {this.handleRemove}
+          />
+        </div>
+      )
+    }
+  ```
+
+  - id를 파라미터로 받아오는 handleRemove 함수를 만들고 PhoneInfoList로 전달.
+  - filter()함수를 통해서 파라미터로 들어온 id를 제외하고 나머지 info값들을 출력
+
+  ```js
+    // file : src/components/PhoneInfoList.js
+    class PhoneInfoList extends Component{
+      static defaultProps = {
+        list : [],
+        onRemove : () => console.warn('onRemove not defined'),
+      }
+      render() {
+        const { data , onRemove } = this.props;
+        const list = data.map(
+          info => (
+            <PhoneInfo
+              key = {info.id}
+              info = {info}
+              onRemove = {onRemove}
+              />)
+          );
+          return (
+            <div>
+              {list}
+            </div>
+          );
+        )
+      }
+    }
+    export default PhoneInfoList;
+  ```
+
+  - PhoneInfoList 에서는 props로 전달받은 onRemove를 그대로 전달.
+    - 이 함수가 전달되지 않았을 경우를 대비하여 해당 props를 위한 defaultProps도 설정.
+
+  ```js
+  // src/components/PhoneInfo.js
+  ```
